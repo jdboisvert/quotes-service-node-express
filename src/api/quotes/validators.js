@@ -4,7 +4,7 @@ const { HTTP } = require('../../constants');
 const quoteValidationRules = () => {
 	return [
 		body('quote').isString().withMessage('Only letters and digits are allowed.'),
-		body('author_name').isAlpha().withMessage('Only letters are allowed.'),
+		body('author').isAlpha().withMessage('Only letters are allowed.'),
 	];
 };
 

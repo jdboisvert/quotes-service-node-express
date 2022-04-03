@@ -1,0 +1,5 @@
+CREATE TABLE quote (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  quote text NOT NULL UNIQUE,
+  author text NOT NULL
+);

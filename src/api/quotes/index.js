@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const quotes = require('../../models/quotes');
-const { userValidationRules, validate } = require('./validator.js');
+const { quoteValidationRules, validate } = require('./validators.js');
 
 // router.get('/', function(req, res, next) {
 //   try {
@@ -12,7 +12,7 @@ const { userValidationRules, validate } = require('./validator.js');
 //   }
 // });
 
-router.post('/', userValidationRules(), validate, (req, res) => {
+router.post('/', quoteValidationRules(), validate, (req, res) => {
 	try {
 		res.json(quotes.create(req.body));
 	} catch(err) {
