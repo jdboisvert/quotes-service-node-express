@@ -1,11 +1,9 @@
 const db = require('../database');
 
 const getAll = () => {
-	const data = db.query(`SELECT * FROM quote`);
+	const quotes = db.runQueryWithoutParams(`SELECT * FROM quote`);
   
-	return {
-		...data,
-	};
+	return quotes;
 };
 
 const create = (quoteObj) => {
