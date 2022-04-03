@@ -14,7 +14,8 @@ const { quoteValidationRules, validate } = require('./validators.js');
 
 router.post('/', quoteValidationRules(), validate, (req, res) => {
 	try {
-		res.json(quotes.create(req.body));
+		const { quote } = req.body;
+		res.json(quotes.create(quote));
 	} catch(err) {
 		console.error(`Error while adding a quote`, err.message);
 	}
