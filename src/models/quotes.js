@@ -6,6 +6,12 @@ const getAll = () => {
 	return quotes;
 };
 
+const get = (id) => {
+	const quote = db.run(`SELECT * FROM quote WHERE id = @id`, { id });
+  
+	return quote;
+};
+
 const create = (quoteObj) => {
 	const { quote, author } = quoteObj;
 	const result = db.run('INSERT INTO quote (quote, author) VALUES (@quote, @author)', { quote, author });
@@ -36,6 +42,17 @@ const update = (quoteObj) => {
 		result = db.run('UPDATE quote SET (author) VALUES (@author) WHERE id = @id', { author, id });
 	}
 	
+	let message = 'Error in updating quote';
+	if (result.changes) {
+	  message = 'Quote updated successfully';
+	}
+  
+	return { message };
+};
+
+const deleteQuote = (id) => {
+	const result = db.run('DELETE FROM quote WHERE id = @id', { id });
+	
 	let message = 'Error in creating quote';
 	if (result.changes) {
 	  message = 'Quote created successfully';
@@ -50,4 +67,6 @@ module.exports = {
 	create,
 	update,
 	getAll,
+	get,
+	deleteQuote,
 };

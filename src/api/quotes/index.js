@@ -11,7 +11,7 @@ router.get('/:id', (req, res, next) => {
 			res.json(quotes.getAll());
 		}
 
-		// TODO Get by ID
+		res.json(quotes.get(id));
 
 	} catch(err) {
 		console.error(`Error while getting quotes `, err.message);
@@ -42,8 +42,14 @@ router.put('/:id', quoteUpdateValidationRules(), validate, (req, res) => {
 	}
 });
 
-// router.delete('/:id', (req, res, next) => {
-// 	// TODO Make delete
-// });
+router.delete('/:id', (req, res, next) => {
+	const { id } = req.params;
+
+	if (!id){
+		res.json("You must provide an id as a query param.");
+	}
+
+	res.json(quotes.deleteQuote(id));
+});
 
 module.exports = router;

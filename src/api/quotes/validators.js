@@ -8,6 +8,13 @@ const quoteValidationRules = () => {
 	];
 };
 
+const quoteUpdateValidationRules = () => {
+	return [
+		body('quote').isString().withMessage('Only letters and digits are allowed.').optional({ nullable: true }),
+		body('author').isString().withMessage('Only letters are allowed.').optional({ nullable: true }),
+	];
+};
+
 const validate = (req, res, next) => {
 	const errors = validationResult(req);
 	if (errors.isEmpty()) {
@@ -23,5 +30,6 @@ const validate = (req, res, next) => {
 
 module.exports = {
 	quoteValidationRules,
+	quoteUpdateValidationRules,
 	validate,
 };
