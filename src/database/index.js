@@ -10,7 +10,12 @@ const runQueryWithoutParams = (sql) => {
 	return db.prepare(sql).all();
 };
 
+const queryWithParams = (sql, params) => {
+	return db.prepare(sql).all(params);
+};
+
 module.exports = {
 	runQueryWithoutParams,
+	queryWithParams,
 	run,
 };

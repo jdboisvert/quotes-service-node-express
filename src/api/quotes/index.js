@@ -3,15 +3,15 @@ const router = express.Router();
 const quotes = require('../../models/quotes');
 const { quoteValidationRules, quoteUpdateValidationRules, validate } = require('./validators.js');
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id?', (req, res, next) => {
 	try {
-		const { id } = req.params;
+		const id = req.query.id;
 
 		if (!id){
 			res.json(quotes.getAll());
 		}
 
-		res.json(quotes.get(id));
+		res.json(quotes.get(id)[0]);
 
 	} catch(err) {
 		console.error(`Error while getting quotes `, err.message);
@@ -28,10 +28,11 @@ router.post('/', quoteValidationRules(), validate, (req, res) => {
 	}
 });
 
-router.put('/:id', quoteUpdateValidationRules(), validate, (req, res) => {
+router.put('/:id?', quoteUpdateValidationRules(), validate, (req, res) => {
 	try {
-		const { id } = req.params;
+		const id = req.query.id;
 		const { quote, author } = req.body;
+		
 		if (!quote && !author){
 			res.json("You must provide at least one value to update.");
 		}
@@ -42,8 +43,8 @@ router.put('/:id', quoteUpdateValidationRules(), validate, (req, res) => {
 	}
 });
 
-router.delete('/:id', (req, res, next) => {
-	const { id } = req.params;
+router.delete('/:id?', (req, res, next) => {
+	const id = req.query.id;
 
 	if (!id){
 		res.json("You must provide an id as a query param.");

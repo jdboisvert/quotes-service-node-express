@@ -7,7 +7,7 @@ const getAll = () => {
 };
 
 const get = (id) => {
-	const quote = db.run(`SELECT * FROM quote WHERE id = @id`, { id });
+	const quote = db.queryWithParams(`SELECT * FROM quote WHERE id = @id`, { id });
   
 	return quote;
 };
@@ -30,16 +30,16 @@ const update = (quoteObj) => {
 	let result = null;
 	if (quote && author){
 		result = db.run(
-			'UPDATE quote SET (quote, author) VALUES (@quote, @author) WHERE id = @id', { quote, author, id }
+			'UPDATE quote SET quote = @quote, author = @author WHERE id = @id', { quote, author, id }
 		);
 	}
 
 	if(quote && !author){
-		result = db.run('UPDATE quote SET (quote) VALUES (@quote) WHERE id = @id', { quote, id });
+		result = db.run('UPDATE quote SET quote = @quote WHERE id = @id', { quote, id });
 	}
 
 	if (author && !quote){
-		result = db.run('UPDATE quote SET (author) VALUES (@author) WHERE id = @id', { author, id });
+		result = db.run('UPDATE quote SET author = @author WHERE id = @id', { author, id });
 	}
 	
 	let message = 'Error in updating quote';
@@ -53,9 +53,9 @@ const update = (quoteObj) => {
 const deleteQuote = (id) => {
 	const result = db.run('DELETE FROM quote WHERE id = @id', { id });
 	
-	let message = 'Error in creating quote';
+	let message = 'Error in deleting quote';
 	if (result.changes) {
-	  message = 'Quote created successfully';
+	  message = 'Quote deleted successfully';
 	}
   
 	return { message };
