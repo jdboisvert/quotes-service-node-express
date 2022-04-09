@@ -8,49 +8,56 @@ router.get('/:id?', (req, res, next) => {
 		const id = req.query.id;
 
 		if (!id){
-			res.json(quotes.getAll());
+			res.status(200).json(quotes.getAll());
 		}
 
-		res.json(quotes.get(id)[0]);
+		res.status(200).json(quotes.get(id)[0]);
 
 	} catch(err) {
-		console.error(`Error while getting quotes `, err.message);
-		next(err);
+		console.error(`Error while getting quote(s)`, err.message);
+		res.status(409).json({ message: "Unable to get the quote(s)." });
 	}
 });
 
 router.post('/', quoteValidationRules(), validate, (req, res) => {
+	const quote = req.body;
+
 	try {
-		const quote = req.body;
-		res.json(quotes.create(quote));
+		res.status(201).json(quotes.create(quote));
 	} catch(err) {
 		console.error(`Error while adding a quote`, err.message);
+		res.status(409).json({ message: "Conflict adding quote." });
 	}
 });
 
 router.put('/:id?', quoteUpdateValidationRules(), validate, (req, res) => {
 	try {
 		const id = req.query.id;
+		if (!id){
+			res.status(400).json({ message: "You must provide an id as a query param." });
+		}
+
 		const { quote, author } = req.body;
 		
 		if (!quote && !author){
-			res.json("You must provide at least one value to update.");
+			res.status(400).json({ message: "You must provide at least one value to update." });
 		}
 
-		res.json(quotes.update({ id, quote, author }));
+		res.status(200).json(quotes.update({ id, quote, author }));
 	} catch(err) {
-		console.error(`Error while adding a quote`, err.message);
+		console.error(`Error while updating a quote`, err.message);
+		res.status(409).json({ message: "Conflict updating quote." });
 	}
 });
 
-router.delete('/:id?', (req, res, next) => {
+router.delete('/:id?', (req, res) => {
 	const id = req.query.id;
 
 	if (!id){
-		res.json("You must provide an id as a query param.");
+		res.status(400).json({ message: "You must provide an id as a query param." });
 	}
 
-	res.json(quotes.deleteQuote(id));
+	res.status(200).json(quotes.deleteQuote(id));
 });
 
 module.exports = router;
