@@ -20,8 +20,6 @@ npm start
 
 #### API Documentation
 
-You can view a full documentation (OpenAPI Standard) (TODO)
-
 The API supports the following requests:
 
 - Create quote
