@@ -1,6 +1,7 @@
 const express = require('express');
 const bp = require('body-parser');
 const quotesRouter = require('./quotes');
+const logger = require("../logger");
 
 const app = express();
 app.use(bp.json());
@@ -15,5 +16,5 @@ app.get('/', (req, res) => {
 app.use('/quotes', quotesRouter);
 
 app.listen(port, () => {
-	console.log(`Quotes Service Listening at http://localhost:${port}`);
+	logger.log(`Quotes Service Listening at http://localhost:${port}`);
 });
