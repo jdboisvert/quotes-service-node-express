@@ -1,20 +1,17 @@
 const db = require('../database');
+// const { logger } = require('../logger');
 
-const getAll = () => {
-	const quotes = db.runQueryWithoutParams(`SELECT * FROM quote`);
-  
-	return quotes;
-};
+const getAll = db.all;
 
 const get = (id) => {
-	const quote = db.queryWithParams(`SELECT * FROM quote WHERE id = @id`, { id });
+	const quote = db.queryWithParams(`SELECT * FROM quote WHERE id = ?`, [ id ]);
   
 	return quote;
 };
 
 const create = (quoteObj) => {
 	const { quote, author } = quoteObj;
-	const result = db.run('INSERT INTO quote (quote, author) VALUES (@quote, @author)', { quote, author });
+	const result = db.run('INSERT INTO quote (quote, author) VALUES (?, ?)', [ quote, author ]);
 	
 	let message = 'Error in creating quote';
 	if (result.changes) {
@@ -30,16 +27,16 @@ const update = (quoteObj) => {
 	let result = null;
 	if (quote && author){
 		result = db.run(
-			'UPDATE quote SET quote = @quote, author = @author WHERE id = @id', { quote, author, id }
+			'UPDATE quote SET quote = ?, author = ? WHERE id = ?', [ quote, author, id ]
 		);
 	}
 
 	if(quote && !author){
-		result = db.run('UPDATE quote SET quote = @quote WHERE id = @id', { quote, id });
+		result = db.run('UPDATE quote SET quote = ? WHERE id = ?', [ quote, id ]);
 	}
 
 	if (author && !quote){
-		result = db.run('UPDATE quote SET author = @author WHERE id = @id', { author, id });
+		result = db.run('UPDATE quote SET author = ? WHERE id = ?', [ author, id ]);
 	}
 	
 	let message = 'Error in updating quote';
@@ -51,7 +48,7 @@ const update = (quoteObj) => {
 };
 
 const deleteQuote = (id) => {
-	const result = db.run('DELETE FROM quote WHERE id = @id', { id });
+	const result = db.run('DELETE FROM quote WHERE id = ?', [ id ]);
 	
 	let message = 'Error in deleting quote';
 	if (result.changes) {

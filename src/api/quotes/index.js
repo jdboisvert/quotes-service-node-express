@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const quotes = require('../../models/quotes');
-const logger = require("../../logger");
+const { logger } = require("../../logger");
 const { quoteValidationRules, quoteUpdateValidationRules, validate } = require('./validators.js');
 
 router.get('/:id?', (req, res, next) => {
@@ -9,13 +9,14 @@ router.get('/:id?', (req, res, next) => {
 		const id = req.query.id;
 
 		if (!id){
-			res.status(200).json(quotes.getAll());
+			quotes.getAll()
+				.then((allQuotes) => res.status(200).json(allQuotes));
 		}
 
 		res.status(200).json(quotes.get(id)[0]);
 
 	} catch(err) {
-		logger.error(`Error while getting quote(s)`, err.message);
+		logger.error(`Error while getting quote(s) ` + err.message);
 		res.status(409).json({ message: "Unable to get the quote(s)." });
 	}
 });
